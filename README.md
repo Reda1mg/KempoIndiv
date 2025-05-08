@@ -1,0 +1,2 @@
+# KempoIndiv
+La partie individuel
