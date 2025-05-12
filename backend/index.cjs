@@ -300,6 +300,30 @@ app.post('/tournaments', (req, res) => {
     res.send(results);
   });
 });
+// Get all users (admin-only)
+app.get('/users', authenticateToken(['ADMIN']), (req, res) => {
+  db.query('SELECT id, username, role, email FROM user', (err, results) => {
+    if (err) {
+      console.error("❌ Error fetching users:", err);
+      return res.status(500).json({ message: "Database error" });
+    }
+
+    res.status(200).json(results);
+  });
+});
+// Update user role
+app.put('/users/:id/role', authenticateToken(['ADMIN']), (req, res) => {
+  const { id } = req.params;
+  const { role } = req.body;
+
+  if (!role) return res.status(400).json({ message: 'Role is required' });
+
+  db.query('UPDATE user SET role = ? WHERE id = ?', [role, id], (err, result) => {
+    if (err) return res.status(500).json({ message: 'Database error', error: err.message });
+    if (result.affectedRows === 0) return res.status(404).json({ message: 'User not found' });
+    res.status(200).json({ message: 'User role updated' });
+  });
+});
 
 // Admin-only route
 app.get('/admin', authenticateToken(['ADMIN']), (req, res) => {

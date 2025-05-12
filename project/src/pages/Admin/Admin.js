@@ -1,6 +1,6 @@
 import React from 'react';
-import AdminControls from './Components/AdminControls';
-import AdminTable from './Components/AdminTable';
+
+import UserTable from './Components/UserTable';
 
 const Admin = () => {
   return (
@@ -19,8 +19,8 @@ const Admin = () => {
       <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>
         Tableau de Bord Admin
       </h1>
-      <AdminControls />
-      <AdminTable />
+      {/* <AdminControls /> */}
+      <UserTable />
     </div>
   );
 };

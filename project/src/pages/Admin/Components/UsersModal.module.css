@@ -77,3 +77,19 @@
 .cancelBtn:hover {
   background-color: #cbd5e0;
 }
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.createBtn {
+  background-color: #0b74de;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+}
