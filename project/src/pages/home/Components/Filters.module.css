@@ -1,0 +1,63 @@
+/* Filters Container - Centering */
+.filtersContainer {
+  display: flex;
+  align-items: center; 
+  justify-content: center;  /* Center horizontally */
+  flex-wrap: wrap; /* Ensures responsiveness */
+  gap: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Full width for centering */
+  text-align: center;
+}
+
+/* Filter Item (Label + Input) */
+.filterItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the items inside */
+  text-align: center;
+}
+
+/* Label Styling */
+.filterItem label {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centers label text */
+  gap: 5px;
+}
+
+/* Inputs & Selects */
+.filterItem input,
+.filterItem select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center; /* Centers text inside input */
+}
+
+/* Center the Create Button */
+.createBtn {
+
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Button Hover */
+.createBtn:hover {
+
+}

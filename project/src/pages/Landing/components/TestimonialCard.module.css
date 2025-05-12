@@ -1,0 +1,45 @@
+.card {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid #1f2937; /* gray-800 */
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: #b91c1c; /* red-700 */
+}
+
+.icon {
+  margin-bottom: 1rem;
+  color: #dc2626; /* red-600 */
+}
+
+.quote {
+  color: #d1d5db; /* gray-300 */
+  margin-bottom: 1.5rem;
+  font-style: italic;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+}
+
+.avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+.author {
+  color: #fff;
+  font-weight: 500;
+}
+
+.title {
+  color: #9ca3af; /* gray-400 */
+  font-size: 0.875rem;
+}

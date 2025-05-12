@@ -1,0 +1,85 @@
+/* Sidebar Container */
+a{
+  text-decoration: none;
+  color: white;
+}
+.sidebar {
+    width: 15%;
+    height: 100vh;
+    background-color: #0f1d33; /* Dark blue */
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+    position: relative;
+}
+  
+  /* User Info */
+  .user-info {
+    text-align: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .user-info p {
+    font-size: 14px;
+    color: #ddd;
+  }
+  
+  .user-info h3 {
+    margin-top: 5px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  /* Navigation Menu */
+  .menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .menu li {
+    padding: 15px;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size: 16px;
+  }
+  
+  .menu li:hover {
+    background-color: #1c2e4a;
+  }
+  
+  /* Logout Button */
+  .logout {
+    margin-top: auto;
+    padding: 15px;
+    text-align: center;
+    background-color: #19273e;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .logout:hover {
+    background-color: #253a5a;
+  }
+  .logo {
+    width: 300px;  /* Adjust width */
+    height: auto;  /* Maintain aspect ratio */
+    display: block;
+    margin: 0 auto 15px; /* Center the logo */
+}
+
+.logo {
+  width: 300px;
+  height: auto;
+  display: block;
+  margin: 0 auto; /* Centers the logo horizontally */
+}
+.user-name {
+  margin-top: 1rem;
+  text-align: center;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 0.9rem;
+}

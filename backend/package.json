@@ -1,0 +1,39 @@
+{
+  "name": "kenpo-backend",
+  "type": "module",
+  "scripts": {
+    "cli": "node --no-warnings=ExperimentalWarning --experimental-strip-types --experimental-transform-types",
+    "watch": "pnpm cli --watch --",
+    "dev": "pnpm watch src/main.ts",
+    "serve": "nodemon index.cjs"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.14.0",
+    "@hono/zod-openapi": "^0.19.2",
+    "@mikro-orm/core": "^6.4.11",
+    "@mikro-orm/migrations": "^6.4.11",
+    "@mikro-orm/mysql": "^6.4.11",
+    "@mikro-orm/seeder": "^6.4.11",
+    "@scalar/hono-api-reference": "^0.7.4",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "hono": "^4.7.5",
+    "jsonwebtoken": "^9.0.2",
+    "jwt-decode": "^4.0.0",
+    "kenpo-backend": "file:",
+    "mysql2": "^3.14.1",
+    "nodemailer": "^7.0.3",
+    "nodemon": "^3.1.10",
+    "uuid": "^11.1.0"
+  },
+  "devDependencies": {
+    "@mikro-orm/cli": "^6.4.11",
+    "@types/node": "^20.11.17",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.8.2"
+  },
+  "packageManager": "pnpm@10.7.0+sha512.6b865ad4b62a1d9842b61d674a393903b871d9244954f652b8842c2b553c72176b278f64c463e52d40fff8aba385c235c8c9ecf5cc7de4fd78b8bb6d49633ab6"
+}

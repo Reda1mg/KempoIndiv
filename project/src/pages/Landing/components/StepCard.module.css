@@ -1,0 +1,54 @@
+.card {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid #1f2937; /* gray-800 */
+  border-radius: 0.5rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  transform: translateY(0);
+}
+
+.card:hover {
+  border-color: #b91c1c; /* red-700 */
+  transform: translateY(-0.5rem);
+}
+
+.iconWrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 4rem;
+  height: 4rem;
+  background-color: rgba(153, 27, 27, 0.3); /* red-900/30 */
+  border-radius: 9999px;
+  margin-bottom: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stepId {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  background-color: #b91c1c; /* red-700 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  margin-right: 0.75rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-family: serif;
+  font-weight: bold;
+  color: white;
+}
+
+.description {
+  color: #d1d5db; /* gray-300 */
+}
