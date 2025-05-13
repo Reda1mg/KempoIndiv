@@ -311,6 +311,24 @@ app.get('/users', authenticateToken(['ADMIN']), (req, res) => {
     res.status(200).json(results);
   });
 });
+// Delete user by ID
+app.delete('/users/:id', authenticateToken(['ADMIN']), (req, res) => {
+  const { id } = req.params;
+
+  db.query('DELETE FROM user WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      console.error("❌ Failed to delete user:", err);
+      return res.status(500).json({ message: 'Database error' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: '✅ User deleted successfully' });
+  });
+});
+
 // Update user role
 app.put('/users/:id/role', authenticateToken(['ADMIN']), (req, res) => {
   const { id } = req.params;

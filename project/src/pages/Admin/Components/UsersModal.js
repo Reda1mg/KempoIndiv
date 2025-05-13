@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './UserTable.module.css';
 import axios from 'axios';
-import UsersModal from './UsersModal'; // ✅ Ensure the path is correct
+import UsersModal from './UsersModal';
 
 const UserModal = () => {
   const [users, setUsers] = useState([]);
@@ -39,7 +39,7 @@ const UserModal = () => {
 
     try {
       if (data.id) {
-        // Update role
+        // Update user role
         await axios.put(`http://localhost:3001/users/${data.id}/role`, {
           role: data.role
         }, {
@@ -50,7 +50,7 @@ const UserModal = () => {
           prev.map(u => u.id === data.id ? { ...u, role: data.role } : u)
         );
       } else {
-        // Create user
+        // Create new user
         await axios.post("http://localhost:3001/register", {
           username: data.username,
           password: data.password,
@@ -60,7 +60,7 @@ const UserModal = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        fetchUsers(); // Refresh the list
+        fetchUsers();
       }
 
       setModalOpen(false);
@@ -73,12 +73,11 @@ const UserModal = () => {
   return (
     <div className={styles.tableSection}>
       <div className={styles.header}>
-  <h2>Utilisateurs Récents</h2>
-  <button className={styles.createBtn} onClick={handleCreateUserClick}>
-    ➕ Créer un utilisateur
-  </button>
-</div>
-
+        <h2>Utilisateurs Récents</h2>
+        <button className={styles.createBtn} onClick={handleCreateUserClick}>
+          ➕ Créer un utilisateur
+        </button>
+      </div>
 
       <table>
         <thead>
@@ -90,21 +89,27 @@ const UserModal = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map(user => (
-            <tr key={user.id}>
-              <td>{user.username}</td>
-              <td>{user.email || '-'}</td>
-              <td>{user.role}</td>
-              <td>
-                <button
-                  className={styles.editBtn}
-                  onClick={() => handleRoleEditClick(user)}
-                >
-                  Modifier le rôle
-                </button>
-              </td>
+          {users.length > 0 ? (
+            users.map(user => (
+              <tr key={user.id}>
+                <td>{user.username}</td>
+                <td>{user.email || '-'}</td>
+                <td>{user.role}</td>
+                <td>
+                  <button
+                    className={styles.editBtn}
+                    onClick={() => handleRoleEditClick(user)}
+                  >
+                    Modifier le rôle
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4">Aucun utilisateur trouvé.</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
 

@@ -40,6 +40,23 @@ const UserTable = () => {
       alert("❌ Impossible de modifier le rôle.");
     }
   };
+  const handleDeleteUser = async (userId) => {
+    const confirm = window.confirm("Êtes-vous sûr de vouloir supprimer cet utilisateur ?");
+    if (!confirm) return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:3001/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      alert("✅ Utilisateur supprimé !");
+      fetchUsers(); // Refresh the list
+    } catch (err) {
+      console.error("❌ Failed to delete user:", err);
+      alert("Erreur lors de la suppression.");
+    }
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -68,7 +85,15 @@ const UserTable = () => {
                   <button onClick={() => handleChangeRole(user.id)}>
                     Modifier le rôle
                   </button>
+                  <button
+                    onClick={() => handleDeleteUser(user.id)}
+                    style={{ marginLeft: "8px", backgroundColor: "#dc3545", color: "white", border: "none", padding: "5px 8px", borderRadius: "4px", cursor: "pointer" }}
+                  >
+                    Supprimer
+                  </button>
                 </td>
+
+
               </tr>
             ))
           ) : (
