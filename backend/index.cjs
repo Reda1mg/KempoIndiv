@@ -262,23 +262,28 @@ app.post('/tournaments/add-competitor', authenticateToken(['ADMIN', 'UTILISATEUR
 
 // Password reset
 app.post('/forgot_Password', (req, res) => {
-  const { username } = req.body;
+  const { email } = req.body;
+
   const token = crypto.randomBytes(32).toString('hex');
   const expires = new Date(Date.now() + 3600000);
 
-  db.query('SELECT * FROM user WHERE username = ?', [username], (err, users) => {
+  db.query('SELECT * FROM user WHERE email = ?', [email], (err, users) => {
     if (err || users.length === 0) return res.status(400).send("User not found.");
 
     db.query(
-      'UPDATE user SET reset_token = ?, reset_token_expires = ? WHERE username = ?',
-      [token, expires, username],
+      'UPDATE user SET reset_token = ?, reset_token_expires = ? WHERE email = ?',
+      [token, expires, email],
       async (err) => {
         if (err) return res.status(500).send("Error saving token.");
 
-        const resetLink = `http://localhost:3001yy/reset-password?token=${token}`;
+        const resetLink = `http://localhost:3002/reset-password?token=${token}`;
 
         try {
-          await sendEmail(users[0].username, 'Password Reset', `Click here to reset your password: ${resetLink}`);
+          await sendEmail(
+            email,
+            'Password Reset',
+            `<p>Click <a href="${resetLink}">here</a> to reset your password.</p>`
+          );
           res.send("Reset link sent.");
         } catch (e) {
           res.status(500).send("Failed to send email.");
@@ -288,7 +293,11 @@ app.post('/forgot_Password', (req, res) => {
   });
 });
 
-// Get tournaments by user
+
+
+
+
+// Get tournaments by user 
 app.post('/tournaments', (req, res) => {
   const { user_id } = req.body;
 
@@ -313,21 +322,73 @@ app.get('/users', authenticateToken(['ADMIN']), (req, res) => {
 });
 // Delete user by ID
 app.delete('/users/:id', authenticateToken(['ADMIN']), (req, res) => {
-  const { id } = req.params;
+  const userId = req.params.id;
 
-  db.query('DELETE FROM user WHERE id = ?', [id], (err, result) => {
+  // 1. Delete related matches
+const deleteMatches = `
+  DELETE FROM \`match\` 
+  WHERE competitor1_id IN (
+    SELECT id FROM competitor WHERE user_id = ?
+  ) OR competitor2_id IN (
+    SELECT id FROM competitor WHERE user_id = ?
+  )
+`;
+
+
+
+  db.query(deleteMatches, [userId, userId], (err) => {
     if (err) {
-      console.error("❌ Failed to delete user:", err);
-      return res.status(500).json({ message: 'Database error' });
+      console.error("Error deleting matches:", err.sqlMessage || err);
+      return res.status(500).json({ message: 'Error deleting matches' });
     }
 
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+    // 2. Delete tournament_competitor_category links
+    const deleteTCC = `
+      DELETE tcc FROM tournament_competitor_category tcc
+      LEFT JOIN tournament t ON tcc.tournament_id = t.id
+      LEFT JOIN competitor c ON tcc.competitor_id = c.id
+      WHERE t.user_id = ? OR c.user_id = ?
+    `;
 
-    res.status(200).json({ message: '✅ User deleted successfully' });
+    db.query(deleteTCC, [userId, userId], (err) => {
+      if (err) {
+        console.error("Error deleting tournament_competitor_category:", err.sqlMessage || err);
+        return res.status(500).json({ message: 'Error deleting tournament_competitor_category' });
+      }
+
+      // 3. Delete competitors
+      db.query('DELETE FROM competitor WHERE user_id = ?', [userId], (err) => {
+        if (err) {
+          console.error("Error deleting competitors:", err.sqlMessage || err);
+          return res.status(500).json({ message: 'Error deleting competitors' });
+        }
+
+        // 4. Delete tournaments
+        db.query('DELETE FROM tournament WHERE user_id = ?', [userId], (err) => {
+          if (err) {
+            console.error("Error deleting tournaments:", err.sqlMessage || err);
+            return res.status(500).json({ message: 'Error deleting tournaments' });
+          }
+
+          // 5. Finally, delete the user
+          db.query('DELETE FROM user WHERE id = ?', [userId], (err, result) => {
+            if (err) {
+              console.error("Error deleting user:", err.sqlMessage || err);
+              return res.status(500).json({ message: 'Error deleting user' });
+            }
+
+            if (result.affectedRows === 0) {
+              return res.status(404).json({ message: 'User not found' });
+            }
+
+            res.status(200).json({ message: 'User and related data deleted' });
+          });
+        });
+      });
+    });
   });
 });
+
 
 // Update user role
 app.put('/users/:id/role', authenticateToken(['ADMIN']), (req, res) => {

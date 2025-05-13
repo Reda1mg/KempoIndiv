@@ -1,9 +1,9 @@
-// sendEmail.js
 const nodemailer = require('nodemailer');
-const email = 'kempo6497@gmail.com'
-const pass = 'mddt rbmq ssps tiws'
 
-const sendEmail = async (to, subject, text) => {
+const email = 'kempo6497@gmail.com';
+const pass = 'mddt rbmq ssps tiws';
+
+const sendEmail = async (to, subject, html) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -13,11 +13,11 @@ const sendEmail = async (to, subject, text) => {
   });
 
   await transporter.sendMail({
-    from: process.env.EMAIL_USER,
+    from: email,
     to,
     subject,
-    text,
+    html,
   });
 };
 
-module.exports = sendEmail;
+module.exports = { sendEmail };
