@@ -48,26 +48,22 @@ const authenticateToken = (roles = []) => {
 
 // Register
 app.post('/register', async (req, res) => {
-  const { username, password, role, email } = req.body;
+  const { username, password, email } = req.body; // remove `role`
 
-  if (!username || !password || !role) {
-    return res.status(400).json({ message: 'All fields are required (username, password, role)' });
+  if (!username || !password) {
+    return res.status(400).json({ message: 'All fields are required (username, password)' });
   }
 
   try {
-    // Check if username is taken
     db.query('SELECT * FROM user WHERE username = ?', [username], async (err, results) => {
       if (err) return res.status(500).json({ message: 'Database error' });
       if (results.length > 0) return res.status(409).json({ message: 'Username already taken' });
 
       const hashedPassword = await bcrypt.hash(password, 10);
+      const defaultRole = 'UTILISATEUR';
 
-      const insertQuery = `
-        INSERT INTO user (username, password, role, email)
-        VALUES (?, ?, ?, ?)
-      `;
-
-      const values = [username, hashedPassword, role, email || null];
+      const insertQuery = `INSERT INTO user (username, password, role, email) VALUES (?, ?, ?, ?)`;
+      const values = [username, hashedPassword, defaultRole, email || null];
 
       db.query(insertQuery, values, (err) => {
         if (err) {

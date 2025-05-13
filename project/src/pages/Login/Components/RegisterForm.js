@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import styles from "./RegisterForm.module.css"; // adjust if needed
+import { Link } from "react-router-dom";
+import styles from "./RegisterForm.module.css";
 
 const RegisterForm = () => {
   const [username, setUsername] = useState("");
@@ -23,7 +24,6 @@ const RegisterForm = () => {
         setEmail("");
         setPassword("");
         setRole("UTILISATEUR");
-        // window.location.href = "/login";
       } else {
         const err = await response.json();
         alert("❌ Erreur : " + err.message);
@@ -35,44 +35,37 @@ const RegisterForm = () => {
   };
 
   return (
-    <div className={styles.registerContainer}>
-      <h2>Inscription</h2>
+    <div className={styles.authBox}>
+      <h2>Créer un compte</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <h3>Créer un compte</h3>
-
-        <label>Nom d'utilisateur:</label>
         <input
           type="text"
+          placeholder="Nom d'utilisateur"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
 
-        <label>Email:</label>
         <input
           type="email"
+          placeholder="adresse@email.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="adresse@email.com"
         />
 
-        <label>Mot de passe:</label>
         <input
           type="password"
+          placeholder="Mot de passe"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
 
-        <label>Rôle:</label>
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="UTILISATEUR">Utilisateur</option>
-          <option value="GESTIONNAIRE">Gestionnaire</option>
-          <option value="ADMIN">Administrateur</option>
-        </select>
+    
 
-        <button type="submit">S'inscrire</button>
+        <button type="submit">Créer un compte</button>
       </form>
+      <Link to="/login" className={styles.loginLink}>Connexion</Link>
     </div>
   );
 };

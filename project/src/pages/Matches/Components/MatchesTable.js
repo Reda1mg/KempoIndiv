@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import styles from "./MatchesTable.module.css";
 
 const MatchesTable = () => {
   const { categoryId } = useParams();
+  const navigate = useNavigate();
+
   const [matches, setMatches] = useState([]);
   const [competitors, setCompetitors] = useState({});
   const [loading, setLoading] = useState(true);
@@ -13,7 +15,12 @@ const MatchesTable = () => {
     const fetchMatches = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/tournaments/categories/${categoryId}/not-finished-matches`
+          `http://localhost:3000/tournaments/categories/${categoryId}/not-finished-matches`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
         );
         setMatches(res.data);
 
@@ -25,7 +32,7 @@ const MatchesTable = () => {
           fetchCompetitor(id);
         });
       } catch (error) {
-        console.error("Erreur chargement des matchs :", error);
+        console.error("❌ Erreur chargement des matchs :", error);
       } finally {
         setLoading(false);
       }
@@ -35,31 +42,23 @@ const MatchesTable = () => {
   }, [categoryId]);
 
   const fetchCompetitor = async (id) => {
-    if (competitors[id]) return competitors[id];
+    if (competitors[id]) return;
 
     try {
-      const res = await axios.get(`http://localhost:3000/competitors/${id}`);
+      const res = await axios.get(`http://localhost:3000/competitors/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       const name = `${res.data.firstname} ${res.data.lastname}`;
       setCompetitors((prev) => ({ ...prev, [id]: name }));
-      return name;
     } catch (err) {
-      console.error(`Erreur chargement du compétiteur ${id} :`, err);
-      return id;
+      console.error(`❌ Erreur chargement du compétiteur ${id} :`, err);
     }
   };
 
-  const handleStartMatch = (matchId) => {
-    const baseUrl = window.location.origin;
-
-    // Open only the telecommande view
-    const telecommandeWindow = window.open(
-      `${baseUrl}/telecommande/${matchId}`,
-      "_blank"
-    );
-
-    if (!telecommandeWindow) {
-      alert("Veuillez autoriser les popups dans votre navigateur.");
-    }
+  const handleScoreboard = (matchId) => {
+    navigate(`/telecommande/${matchId}`);
   };
 
   return (
@@ -85,17 +84,17 @@ const MatchesTable = () => {
           <tbody>
             {matches.map((m) => (
               <tr key={m.id}>
-                <td>{competitors[m.competitor1] || m.competitor1}</td>
-                <td>{competitors[m.competitor2] || m.competitor2}</td>
+                <td>{competitors[m.competitor1] || "..."}</td>
+                <td>{competitors[m.competitor2] || "..."}</td>
                 <td>{m.score1}</td>
                 <td>{m.score2}</td>
                 <td>{m.winner || "-"}</td>
                 <td>
                   <button
                     className={styles.scoreboardButton}
-                    onClick={() => handleStartMatch(m.id)}
+                    onClick={() => handleScoreboard(m.id)}
                   >
-                    Commencer
+                    Scoreboard
                   </button>
                 </td>
               </tr>

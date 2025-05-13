@@ -1,34 +1,58 @@
-.container {
+.authBox {
   max-width: 400px;
-  margin: auto;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  margin: 10vh auto;
+  padding: 2rem;
   background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+h3 {
+  font-size: 1.4rem;
+  margin: 0.5rem 0;
+  color: #003366;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
+  margin-top: 1rem;
 }
 
-input, select {
-  padding: 8px;
+input,
+select {
+  padding: 10px;
+  font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
 }
 
 button {
-  padding: 10px;
   background-color: #2d89ef;
   color: white;
+  font-weight: bold;
   border: none;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.message {
-  margin-top: 10px;
-  color: green;
+button:hover {
+  background-color: #1e6cd3;
+}
+
+.loginLink {
+  display: block;
+  margin-top: 1rem;
+  color: #2d89ef;
+  text-decoration: underline;
+  font-size: 0.95rem;
 }

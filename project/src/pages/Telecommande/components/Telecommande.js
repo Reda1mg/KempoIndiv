@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { io } from "socket.io-client";
+import jsPDF from "jspdf";
 import styles from "./Telecommande.module.css";
+
+const socket = io("http://localhost:3010");
 
 const Telecommande = () => {
   const { matchId } = useParams();
@@ -14,7 +18,14 @@ const Telecommande = () => {
   const [faults1, setFaults1] = useState(() => +localStorage.getItem("faults1") || 0);
   const [faults2, setFaults2] = useState(() => +localStorage.getItem("faults2") || 0);
   const [time, setTime] = useState(() => +localStorage.getItem("time") || 180);
-  const [matchRes, setMatchRes] = useState(localStorage.getItem('matchRes') ? localStorage.getItem('matchRes') : {});
+  const [matchRes, setMatchRes] = useState(() => {
+    try {
+      const stored = localStorage.getItem('matchRes');
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  });
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
@@ -38,20 +49,43 @@ const Telecommande = () => {
   useEffect(() => {
     if (isRunning && time > 0) {
       timerRef.current = setInterval(() => {
-        setTime((prev) => prev - 1);
+        setTime((prev) => {
+          const next = prev - 1;
+          socket.emit("updateMatch", {
+            matchId,
+            score1,
+            score2,
+            keikuka1: faults1,
+            keikuka2: faults2,
+            time: next,
+            isRunning: true
+          });
+          return next;
+        });
       }, 1000);
+    } else {
+      clearInterval(timerRef.current);
     }
     return () => clearInterval(timerRef.current);
   }, [isRunning]);
 
   useEffect(() => {
+    socket.emit("updateMatch", {
+      matchId,
+      score1,
+      score2,
+      keikuka1: faults1,
+      keikuka2: faults2,
+      time,
+      isRunning
+    });
     localStorage.setItem("score1", score1);
     localStorage.setItem("score2", score2);
     localStorage.setItem("faults1", faults1);
     localStorage.setItem("faults2", faults2);
     localStorage.setItem("time", time);
-    localStorage.setItem("matchRes", matchRes);
-  }, [score1, score2, faults1, faults2, time, matchRes]);
+    localStorage.setItem("matchRes", JSON.stringify(matchRes));
+  }, [score1, score2, faults1, faults2, time, matchRes, isRunning]);
 
   const formatTime = (seconds) => {
     const m = String(Math.floor(seconds / 60)).padStart(2, "0");
@@ -60,7 +94,10 @@ const Telecommande = () => {
   };
 
   const handleStart = () => {
-    if (time > 0) setIsRunning(true);
+    if (time > 0) {
+      setIsRunning(true);
+      window.open(`/scoreboard/${matchId}`, "_blank");
+    }
   };
 
   const handlePause = () => {
@@ -94,8 +131,8 @@ const Telecommande = () => {
       loser,
     };
 
-    setMatchRes(result)
-    localStorage.clear();
+    setMatchRes(result);
+    localStorage.setItem("matchRes", JSON.stringify(result));
   };
 
   const applyFaute = (setScore, competitor_num) => {
@@ -104,29 +141,37 @@ const Telecommande = () => {
     else setFaults2((f) => f + 1);
   };
 
-  const downloadMatchResultCSV = (obj) => {
-    if(!obj.competitor1){
-      alert('Pas de données à télécharger !')
+  const downloadPDF = () => {
+    if (!matchRes.competitor1) {
+      alert("Pas de données à télécharger !");
+      return;
     }
-    const headers = ['Competitor ID', 'Score', 'Faults', 'Role'];
-    const rows = [
-      [obj.competitor1.id, obj.competitor1.score, obj.competitor1.faults, obj.winner === obj.competitor1.id ? 'Winner' : 'Loser'],
-      [obj.competitor2.id, obj.competitor2.score, obj.competitor2.faults, obj.winner === obj.competitor2.id ? 'Winner' : 'Loser'],
-    ];
-    const csvContent = [headers, ...rows].map(row => row.join(',')).join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'match_result.csv';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Résultat du Match", 20, 20);
+
+    doc.setFontSize(12);
+    doc.text(`Joueur 1: ${competitor1.firstname} ${competitor1.lastname}`, 20, 40);
+    doc.text(`Score: ${matchRes.competitor1.score}`, 20, 50);
+    doc.text(`Fautes: ${matchRes.competitor1.faults}`, 20, 60);
+
+    doc.text(`Joueur 2: ${competitor2.firstname} ${competitor2.lastname}`, 20, 80);
+    doc.text(`Score: ${matchRes.competitor2.score}`, 20, 90);
+    doc.text(`Fautes: ${matchRes.competitor2.faults}`, 20, 100);
+
+    const winnerName = matchRes.winner === competitor1.id
+      ? `${competitor1.firstname} ${competitor1.lastname}`
+      : `${competitor2.firstname} ${competitor2.lastname}`;
+
+    doc.setFontSize(14);
+    doc.text(`🏆 Gagnant: ${winnerName}`, 20, 120);
+
+    doc.save("match_result.pdf");
   };
 
   return (
     <div className={styles.container}>
-      {/* Competitor 1 */}
       <div className={styles.card}>
         <div className={styles.competitor}>
           <strong>{competitor1.firstname} {competitor1.lastname}</strong>
@@ -140,7 +185,6 @@ const Telecommande = () => {
         </div>
       </div>
 
-      {/* Competitor 2 */}
       <div className={styles.card}>
         <div className={styles.competitor}>
           <strong>{competitor2.firstname} {competitor2.lastname}</strong>
@@ -154,16 +198,15 @@ const Telecommande = () => {
         </div>
       </div>
 
-      {/* Timer */}
       <div className={`${styles.card} ${styles.timerCard}`}>
         <div className={styles.timer}>{formatTime(time)}</div>
         <div className={styles.timerControls}>
-          <button className={`${styles.ctrlBtn} ${styles.select}`}>SELECT</button>
-          <button className={`${styles.ctrlBtn} ${styles.start}`} onClick={handleStart}>START</button>
+          {/* <button className={`${styles.ctrlBtn} ${styles.select}`}>SELECT</button> */}
+          <button className={`${styles.ctrlBtn} ${styles.start}`} onClick={handleStart}>COMMENCER</button>
           <button className={`${styles.ctrlBtn} ${styles.pause}`} onClick={handlePause}>PAUSE</button>
           <button className={`${styles.ctrlBtn} ${styles.reset}`} onClick={handleReset}>RESET</button>
-          <button className={`${styles.ctrlBtn} ${styles.end}`} onClick={handleEnd}>END</button>
-          <button className={`${styles.ctrlBtn} ${styles.download_csv}`} onClick={()=> downloadMatchResultCSV(matchRes)}>Download</button>
+          <button className={`${styles.ctrlBtn} ${styles.end}`} onClick={handleEnd}>Terminer</button>
+          <button className={`${styles.ctrlBtn} ${styles.download_csv}`} onClick={downloadPDF}>TELECHARGER</button>
         </div>
       </div>
     </div>

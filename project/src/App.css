@@ -4,3 +4,7 @@
 .content{
   width: 85%;
 }
+table th {
+  background-color: #e07925; /* soft bluish-gray */
+  color: #fffefe;
+}

@@ -15,6 +15,8 @@ import Register from "./pages/Login/Register";
 import ForgotPassword from './pages/ForgotPass/ForgotPassowrd'
 import Landing from './pages/Landing/Landing'
 import ResetPassword from "./pages/ResetPassword/ResetPassword";
+import ScoreboardDynamic from "./pages/Scoreboard/components/ScoerBoardDynamic"; 
+
 function App() {
   return (
     <div className="App">
@@ -37,6 +39,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot_password" element={<ForgotPassword />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+<Route path="/scoreboard/:matchId" element={<ScoreboardDynamic />} />
 
         </Routes>
       </Router>

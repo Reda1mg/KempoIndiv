@@ -78,4 +78,21 @@
   .categoryTable button:hover {
     background-color: #007f52;
   }
-  
+  .matchBtn {
+  margin-left: 1rem;
+  padding: 12px 20px;
+  background: linear-gradient(90deg, #2563eb, #1d4ed8);
+  color: white;
+  font-weight: 500;
+  font-size: 15px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.matchBtn:hover {
+  background: linear-gradient(90deg, #1d4ed8, #1e40af);
+  transform: scale(1.03);
+}
