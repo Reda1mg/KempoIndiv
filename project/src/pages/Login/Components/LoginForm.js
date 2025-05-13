@@ -37,7 +37,7 @@ const LoginForm = () => {
   return (
     <div className={styles.loginContainer}>
       <div className={styles.card}>
-        <h2 className={styles.title}>Login</h2>
+        <h2 className={styles.title}>Connexion</h2>
         <form onSubmit={handleSubmit} className={styles.form}>
           <input
             type="text"

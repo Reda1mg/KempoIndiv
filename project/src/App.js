@@ -14,7 +14,7 @@ import AdminUsers from './pages/Admin/Components/AdminUsers';
 import Register from "./pages/Login/Register";
 import ForgotPassword from './pages/ForgotPass/ForgotPassowrd'
 import Landing from './pages/Landing/Landing'
-
+import ResetPassword from "./pages/ResetPassword/ResetPassword";
 function App() {
   return (
     <div className="App">
@@ -35,8 +35,8 @@ function App() {
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/utilisateurs" element={<AdminUsers />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/forgot_pass" element={<ForgotPassword />} />
-    
+          <Route path="/forgot_password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
         </Routes>
       </Router>

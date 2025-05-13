@@ -5,19 +5,26 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await fetch("http://localhost:3001/forgot_Password", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await fetch("http://localhost:3001/forgot_Password", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }), // Must match backend: { email }
+    });
+
+    if (response.ok) {
       setSubmitted(true);
-    } catch (err) {
-      console.error("Error sending email:", err);
+    } else {
+      const text = await response.text();
+      console.error("Failed:", text);
     }
-  };
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
 
   return (
     <div className={styles.container}>

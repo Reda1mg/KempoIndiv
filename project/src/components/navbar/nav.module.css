@@ -1,85 +1,86 @@
 /* Sidebar Container */
-a{
+a {
   text-decoration: none;
   color: white;
 }
+
 .sidebar {
-    width: 15%;
-    height: 100vh;
-    background-color: #0f1d33; /* Dark blue */
-    color: white;
-    display: flex;
-    flex-direction: column;
-    padding-top: 20px;
-    position: relative;
+  width: 15%;
+  height: 100vh;
+  background-color: #681035; /* Deep navy */
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  position: relative;
 }
-  
-  /* User Info */
-  .user-info {
-    text-align: center;
-    padding: 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  }
-  
-  .user-info p {
-    font-size: 14px;
-    color: #ddd;
-  }
-  
-  .user-info h3 {
-    margin-top: 5px;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  /* Navigation Menu */
-  .menu {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .menu li {
-    padding: 15px;
-    cursor: pointer;
-    transition: background 0.3s;
-    font-size: 16px;
-  }
-  
-  .menu li:hover {
-    background-color: #1c2e4a;
-  }
-  
-  /* Logout Button */
-  .logout {
-    margin-top: auto;
-    padding: 15px;
-    text-align: center;
-    background-color: #19273e;
-    cursor: pointer;
-    transition: background 0.3s;
-  }
-  
-  .logout:hover {
-    background-color: #253a5a;
-  }
-  .logo {
-    width: 300px;  /* Adjust width */
-    height: auto;  /* Maintain aspect ratio */
-    display: block;
-    margin: 0 auto 15px; /* Center the logo */
+
+/* User Info */
+.user-info {
+  text-align: center;
+  padding: 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.user-info p {
+  font-size: 14px;
+  color: #aaa;
+}
+
+.user-info h3 {
+  margin-top: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #f0f0f0;
+}
+
+/* Navigation Menu */
+.menu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  padding: 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 16px;
+  color: #e2e8f0;
+}
+
+.menu li:hover {
+  background-color: #2d3359; /* Lighter navy hover */
+}
+
+/* Logout Button */
+.logout {
+  margin-top: auto;
+  padding: 15px;
+  text-align: center;
+  background-color: #2a2f4b; /* Subtle dark */
+  cursor: pointer;
+  transition: background 0.3s;
+  color: #ff6b6b; /* Soft red */
+  font-weight: bold;
+}
+
+.logout:hover {
+  background-color: #ff4b4b;
+  color: white;
 }
 
 .logo {
-  width: 300px;
+  width: 250px;
   height: auto;
   display: block;
-  margin: 0 auto; /* Centers the logo horizontally */
+  margin: 0 auto 1rem;
 }
+
 .user-name {
   margin-top: 1rem;
   text-align: center;
-  color: #ffffff;
+  color: #f0f0f0;
   font-weight: bold;
   font-size: 0.9rem;
 }
