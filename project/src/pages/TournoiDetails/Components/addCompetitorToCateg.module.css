@@ -10,6 +10,7 @@
     font-weight: bold;
     margin-bottom: 1.5rem;
     text-align: center;
+    color: #cc4814;
   }
   
   .tableWrapper {
@@ -69,7 +70,7 @@
   }
   
   .startBtn {
-    background-color: #28a745;
+      background: linear-gradient(90deg, #ebb625, #d8521d);
     color: white;
     border: none;
     padding: 14px 26px;
@@ -80,11 +81,13 @@
   }
   
   .startBtn:hover {
-    background-color: #218838;
+       background: linear-gradient(90deg, #d8681d, #af1e9c);
+      transition: 0.5;
+       transform: scale(1.03);
   }.matchBtn {
   margin-left: 1rem;
   padding: 14px 24px;
-  background: linear-gradient(90deg, #53eb25, #1d4ed8);
+  background: linear-gradient(90deg, #ebb625, #d8521d);
   color: white;
   font-weight: 500;
   font-size: 16px;

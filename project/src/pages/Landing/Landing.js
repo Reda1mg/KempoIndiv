@@ -5,7 +5,7 @@ import Testimonials from "./components/Testimonials";
 function Landing() {
     return (
         <div>
-    
+    Accueil
         </div>
     );
 }

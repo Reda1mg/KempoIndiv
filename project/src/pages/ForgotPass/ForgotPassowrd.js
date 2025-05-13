@@ -28,9 +28,9 @@ const handleSubmit = async (e) => {
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>Forgot Password</h2>
+      <h2 className={styles.title}>Mot de passe oubilé</h2>
       {submitted ? (
-        <p className={styles.message}>Check your email for a reset link.</p>
+        <p className={styles.message}>Veuillez verifier votre email.</p>
       ) : (
         <form onSubmit={handleSubmit}>
           <input
@@ -42,7 +42,7 @@ const handleSubmit = async (e) => {
             onChange={(e) => setEmail(e.target.value)}
           />
           <button type="submit" className={styles.button}>
-            Send Reset Link
+            Valider
           </button>
         </form>
       )}
